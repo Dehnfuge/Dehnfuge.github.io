@@ -1,109 +1,109 @@
-<input type="file" id="imageInput" accept="image/png">
+<input type="file" id="imageInput" accept="image/png" />
 <button id="saveMoves">Save Moves</button>
 <button id="loadMoves">Load Moves</button>
-<input type="file" id="movesInput" accept=".json" style="display:none">
+<input type="file" id="movesInput" accept=".json" style="display: none" />
 <button id="applyMoves">Apply Moves to New Image</button>
 <canvas id="canvas" width="400" height="400"></canvas>
 
 <script>
-const imageInput = document.getElementById('imageInput');
-const saveMovesBtn = document.getElementById('saveMoves');
-const loadMovesBtn = document.getElementById('loadMoves');
-const movesInput = document.getElementById('movesInput');
-const applyMovesBtn = document.getElementById('applyMoves');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+  const imageInput = document.getElementById("imageInput")
+  const saveMovesBtn = document.getElementById("saveMoves")
+  const loadMovesBtn = document.getElementById("loadMoves")
+  const movesInput = document.getElementById("movesInput")
+  const applyMovesBtn = document.getElementById("applyMoves")
+  const canvas = document.getElementById("canvas")
+  const ctx = canvas.getContext("2d")
 
-let img = new Image();
-let selectedData = null;
-let moves = [];  // Array to store the moves
+  let img = new Image()
+  let selectedData = null
+  let moves = [] // Array to store the moves
 
-imageInput.addEventListener('change', function() {
-    const file = this.files[0];
-    const reader = new FileReader();
+  imageInput.addEventListener("change", function () {
+    const file = this.files[0]
+    const reader = new FileReader()
 
-    reader.onload = function(event) {
-        img.onload = function() {
-            ctx.drawImage(img, 0, 0);
-            drawGrid();
-        }
-        img.src = event.target.result;
+    reader.onload = function (event) {
+      img.onload = function () {
+        ctx.drawImage(img, 0, 0)
+        drawGrid()
+      }
+      img.src = event.target.result
     }
 
-    reader.readAsDataURL(file);
-});
+    reader.readAsDataURL(file)
+  })
 
-canvas.addEventListener('click', function(event) {
-    const x = Math.floor(event.offsetX / 8) * 8;
-    const y = Math.floor(event.offsetY / 8) * 8;
-    
+  canvas.addEventListener("click", function (event) {
+    const x = Math.floor(event.offsetX / 8) * 8
+    const y = Math.floor(event.offsetY / 8) * 8
+
     if (selectedData) {
-        ctx.putImageData(selectedData, x, y);
-        
-        // Log the move
-        moves.push({
-            source: { x: selectedData.srcX, y: selectedData.srcY },
-            dest: { x, y }
-        });
-        
-        selectedData = null;
-    } else {
-        selectedData = ctx.getImageData(x, y, 8, 8);
-        selectedData.srcX = x;  // Store the original x coordinate
-        selectedData.srcY = y;  // Store the original y coordinate
-    }
-});
+      ctx.putImageData(selectedData, x, y)
 
-applyMovesBtn.addEventListener('click', function() {
+      // Log the move
+      moves.push({
+        source: { x: selectedData.srcX, y: selectedData.srcY },
+        dest: { x, y },
+      })
+
+      selectedData = null
+    } else {
+      selectedData = ctx.getImageData(x, y, 8, 8)
+      selectedData.srcX = x // Store the original x coordinate
+      selectedData.srcY = y // Store the original y coordinate
+    }
+  })
+
+  applyMovesBtn.addEventListener("click", function () {
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     // Redraw the original image
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0)
 
     // Apply each move on the new image
-    moves.forEach(move => {
-        const imageData = ctx.getImageData(move.source.x, move.source.y, 8, 8);
-        ctx.putImageData(imageData, move.dest.x, move.dest.y);
-    });
-});
+    moves.forEach((move) => {
+      const imageData = ctx.getImageData(move.source.x, move.source.y, 8, 8)
+      ctx.putImageData(imageData, move.dest.x, move.dest.y)
+    })
+  })
 
-function drawGrid() {
-    const rows = canvas.width / 8;
-    const cols = canvas.height / 8;
-    
+  function drawGrid() {
+    const rows = canvas.width / 8
+    const cols = canvas.height / 8
+
     for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            //ctx.strokeRect(i * 8, j * 8, 8, 8);
-        }
+      for (let j = 0; j < cols; j++) {
+        //ctx.strokeRect(i * 8, j * 8, 8, 8);
+      }
     }
-}
+  }
 
-saveMovesBtn.addEventListener('click', function() {
-    const data = new Blob([JSON.stringify(moves)], { type: 'application/json' });
-    const url = URL.createObjectURL(data);
+  saveMovesBtn.addEventListener("click", function () {
+    const data = new Blob([JSON.stringify(moves)], { type: "application/json" })
+    const url = URL.createObjectURL(data)
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'moves.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-});
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "moves.json"
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  })
 
-loadMovesBtn.addEventListener('click', function() {
-    movesInput.click();
-});
+  loadMovesBtn.addEventListener("click", function () {
+    movesInput.click()
+  })
 
-movesInput.addEventListener('change', function() {
-    const file = this.files[0];
-    const reader = new FileReader();
+  movesInput.addEventListener("change", function () {
+    const file = this.files[0]
+    const reader = new FileReader()
 
-    reader.onload = function(event) {
-        moves = JSON.parse(event.target.result);
-        alert('Moves loaded successfully!');
+    reader.onload = function (event) {
+      moves = JSON.parse(event.target.result)
+      alert("Moves loaded successfully!")
     }
 
-    reader.readAsText(file);
-});
+    reader.readAsText(file)
+  })
 </script>
