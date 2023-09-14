@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tileset Aufteiler</title>
+</head>
+
+<body>
+
+<input type="file" id="tilesetImage" accept="image/*">
+<label for="suffixes">Suffixe (durch Komma getrennt): </label>
+<input type="text" id="suffixes" value="A,B,C,D,E"> <!-- Standardwert -->
+<button onclick="sliceImage()">Bild aufteilen</button>
+
+<script>
+    const columnsPerSet = 5;
+
+    function sliceImage() {
+        const tileSize = 44;
+        const input = document.getElementById('tilesetImage');
+        const file = input.files[0];
+        const suffixes = document.getElementById('suffixes').value.split(',');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    const rows = img.height / tileSize;
+                    const totalColumns = img.width / tileSize;
+
+                    for (let y = 0; y < rows; y++) {
+                        let columnCounter = 0;
+                        let setCounter = 0;
+
+                        for (let x = 0; x < totalColumns; x++) {
+                            canvas.width = tileSize;
+                            canvas.height = tileSize;
+                            ctx.drawImage(img, x * tileSize, y * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
+
+                            const filename = `${suffixes[setCounter] || setCounter}_${x}_${y}.png`;
+                            const imgDataUrl = canvas.toDataURL("image/png");
+                            downloadImage(imgDataUrl, filename);
+
+                            columnCounter++;
+
+                            if (columnCounter >= columnsPerSet) {
+                                columnCounter = 0;
+                                setCounter++;
+                            }
+                        }
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function downloadImage(dataUrl, filename) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+
+</html>
