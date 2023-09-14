@@ -12,16 +12,17 @@
 <input type="file" id="tilesetImage" accept="image/*">
 <label for="suffixes">Suffixe (durch Komma getrennt): </label>
 <input type="text" id="suffixes" value="A,B,C,D,E"> <!-- Standardwert -->
+<label for="columnsPerSet">Spalten pro Satz (durch Komma getrennt, z.B. 5,5,8,11,5): </label>
+<input type="text" id="columnsPerSet" value="5,5,8,11,5">
 <button onclick="sliceImage()">Bild aufteilen</button>
 
 <script>
-    const columnsPerSet = 5;
-
     function sliceImage() {
         const tileSize = 44;
         const input = document.getElementById('tilesetImage');
         const file = input.files[0];
         const suffixes = document.getElementById('suffixes').value.split(',');
+        const columnsArray = document.getElementById('columnsPerSet').value.split(',').map(Number);
 
         if (file) {
             const reader = new FileReader();
@@ -43,13 +44,13 @@
                             canvas.height = tileSize;
                             ctx.drawImage(img, x * tileSize, y * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
 
-                            const filename = `${suffixes[setCounter] || setCounter}_${x}_${y}.png`;
+                            const filename = `${suffixes[setCounter] || setCounter}_${columnCounter}_${y}.png`;
                             const imgDataUrl = canvas.toDataURL("image/png");
                             downloadImage(imgDataUrl, filename);
 
                             columnCounter++;
 
-                            if (columnCounter >= columnsPerSet) {
+                            if (columnCounter >= columnsArray[setCounter]) {
                                 columnCounter = 0;
                                 setCounter++;
                             }
