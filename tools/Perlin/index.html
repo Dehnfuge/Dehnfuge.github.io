@@ -4,19 +4,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
 <script>
     function setup() {
-        createCanvas(400, 400);
+        createCanvas(480, 360);
         noLoop();
     }
 
     function draw() {
         background(220);
-        
+
         loadPixels();
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
-                let n = noise(x * 0.1, y * 0.1);  // Dieses 0.1 ist eine Skalierung. Sie können es ändern, um unterschiedliche "Zoomstufen" des Rauschens zu erhalten.
-                let c = n * 255;
-                set(x, y, color(c, c, c));
+                let n = noise(x * 0.1, y * 0.1);
+                
+                // Hier wird das Rauschen auf 10 Graustufen normalisiert.
+                let grayValue = Math.round(n * 9) * 28; 
+                
+                set(x, y, color(grayValue));
             }
         }
         updatePixels();
