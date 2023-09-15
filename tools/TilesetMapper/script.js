@@ -2,7 +2,15 @@ const tileMapping = Array(256).fill('grasserde_0_7.png');
 let currentCenterTileIndex = 0;
 
 function toggleTile(td) {
-    td.innerText = td.innerText === '1' ? '0' : '1';
+    if (td.textContent === '0') {
+        td.textContent = '1';
+        td.classList.remove('dirt');
+        td.classList.add('grass');
+    } else {
+        td.textContent = '0';
+        td.classList.remove('grass');
+        td.classList.add('dirt');
+    }
     updateCenterTile();
 }
 
@@ -143,6 +151,13 @@ function setRandomDefaultCenterTile() {
     const cells = document.querySelectorAll('#tileGrid td:not(#centerTile)');
     cells.forEach((cell, index) => {
         cell.textContent = binaryRepresentation[index];
+        if (binaryRepresentation[index] === '0') {
+            cell.classList.add('dirt');
+            cell.classList.remove('grass');
+        } else {
+            cell.classList.add('grass');
+            cell.classList.remove('dirt');
+        }
     });
 
     // Das centerTile aktualisieren
