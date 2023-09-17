@@ -35,9 +35,9 @@ function setCurrentCenterTileIndex() {
 }
 
 const table = document.getElementById('imageGrid');
-for (let y = 0; y < 10; y++) {
+for (let y = 0; y < 16; y++) {
     const row = table.insertRow(y);
-    for (let x = 0; x < 10; x++) {
+    for (let x = 0; x < 16; x++) {
         const cell = row.insertCell(x);
         const img = document.createElement('img');
         
