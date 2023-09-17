@@ -1,6 +1,6 @@
 const suffix = "höhle"
-const defaultTile = "_2_1"
-const tileMapping = Array(256).fill(suffix+defaultTile+'.png');
+const defaultPrefix = "_2_1"
+const tileMapping = Array(256).fill(suffix+defaultPrefix+'.png');
 let currentCenterTileIndex = 0;
 
 function toggleTile(td) {
@@ -104,11 +104,11 @@ function loadTileMapping() {
 }
 
 function listDefaultCombinations() {
-    const defaultTile = suffix+defaultTile+'.png';
+    const defaultTile = suffix+defaultPrefix+'.png';
     const defaultCombinations = [];
 
     for (let i = 0; i < tileMapping.length; i++) {
-        if (tileMapping[i] === defaultTile) {
+        if (tileMapping[i] === defaultPrefix) {
             defaultCombinations.push(i.toString(2).padStart(8, '0')); 
         }
     }
@@ -131,7 +131,7 @@ function listDefaultCombinations() {
 }
 
 function setRandomDefaultCenterTile() {
-    const defaultTile = suffix+defaultTile+'.png';
+    const defaultTile = suffix+defaultPrefix+'.png';
     const defaultIndices = [];
 
     for (let i = 0; i < tileMapping.length; i++) {
