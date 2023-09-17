@@ -42,7 +42,7 @@ for (let y = 0; y < 16; y++) {
         const img = document.createElement('img');
         
         img.src = `./img/${suffix}_${y}_${x}.png`;
-        img.alt = `${suffix} Tile (${y}, ${x})`;
+        img.alt = "";//`${suffix} Tile (${y}, ${x})`;
         img.width = 50;  
         img.height = 50; 
         
