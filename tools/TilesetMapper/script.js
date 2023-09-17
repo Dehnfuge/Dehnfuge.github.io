@@ -1,5 +1,5 @@
 const suffix = "höhle"
-const tileMapping = Array(256).fill(suffix+'_0_7.png');
+const tileMapping = Array(256).fill(suffix+'_2_1.png');
 let currentCenterTileIndex = 0;
 
 function toggleTile(td) {
