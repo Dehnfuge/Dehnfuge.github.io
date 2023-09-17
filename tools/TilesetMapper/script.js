@@ -18,7 +18,7 @@ function toggleTile(td) {
 function updateCenterTile() {
     setCurrentCenterTileIndex();
     const centerImage = document.getElementById('centerImage');
-    centerImage.src = `./${tileMapping[currentCenterTileIndex]}`;
+    centerImage.src = `./img/${tileMapping[currentCenterTileIndex]}`;
 }
 
 function setCurrentCenterTileIndex() {
@@ -40,7 +40,7 @@ for (let y = 0; y < 10; y++) {
         const cell = row.insertCell(x);
         const img = document.createElement('img');
         
-        img.src = `./${suffix}_${y}_${x}.png`;
+        img.src = `./img/${suffix}_${y}_${x}.png`;
         img.alt = `${suffix} Tile (${y}, ${x})`;
         img.width = 50;  
         img.height = 50; 
