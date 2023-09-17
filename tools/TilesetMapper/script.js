@@ -108,7 +108,7 @@ function listDefaultCombinations() {
     const defaultCombinations = [];
 
     for (let i = 0; i < tileMapping.length; i++) {
-        if (tileMapping[i] === defaultPrefix) {
+        if (tileMapping[i] === defaultTile) {
             defaultCombinations.push(i.toString(2).padStart(8, '0')); 
         }
     }
