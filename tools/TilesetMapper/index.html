@@ -8,24 +8,24 @@
 </head>
 <body>
 
-<table id="tileGrid" border="1">
+<table id="tileGrid">
     <tr>
-        <td onclick="toggleTile(this)" colspan="3">0</td>
+        <td></td>
+        <td id="cell0" onclick="changeCell(this)">0</td>
+        <td></td>
     </tr>
     <tr>
-        <td onclick="toggleTile(this)">0</td>
-        <td id="centerTile">
-            <img id="centerImage" src="" alt="Tile Image" width="50" height="50">
-        </td>
-        <td onclick="toggleTile(this)">0</td>
+        <td id="cell1" onclick="changeCell(this)">0</td>
+        <td id="centerTile"><img id="centerTileImage" src="./default_tile.png" alt="Center Tile" /></td>
+        <td id="cell2" onclick="changeCell(this)">0</td>
     </tr>
     <tr>
-        <td onclick="toggleTile(this)" colspan="3">0</td>
-    </tr>
-    <tr>
-        <td onclick="toggleTile(this)" colspan="3">0</td>
+        <td></td>
+        <td id="cell3" onclick="changeCell(this)">0</td>
+        <td></td>
     </tr>
 </table>
+    
 <button onclick="setRandomDefaultCenterTile()">Zufälligen Standard-Zentergrid setzen</button>
 
 <table id="imageGrid"></table>

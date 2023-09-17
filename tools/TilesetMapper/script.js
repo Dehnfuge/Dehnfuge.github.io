@@ -23,16 +23,16 @@ function updateCenterTile() {
 }
 
 function setCurrentCenterTileIndex() {
-    const grid = document.querySelectorAll('#tileGrid td');
-    let binaryString = '';
-    const surroundingIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-
-    surroundingIndices.forEach(index => {
-        binaryString += grid[index].innerText;
+    const cells = document.querySelectorAll('#tileGrid td:not(#centerTile)');
+    let binaryValue = '';
+    
+    cells.forEach(cell => {
+        binaryValue += cell.textContent;
     });
-
-    currentCenterTileIndex = parseInt(binaryString, 2);
+    
+    return parseInt(binaryValue, 2);
 }
+
 
 const table = document.getElementById('imageGrid');
 for (let y = 0; y < 16; y++) {
@@ -134,7 +134,7 @@ function setRandomDefaultCenterTile() {
     const defaultTile = suffix+defaultTile+'.png';
     const defaultIndices = [];
 
-    for (let i = 0; i < tileMapping.length; i++) {
+    for (let i = 0; i < 16; i++) {  // Das Limit ändert sich auf 16
         if (tileMapping[i] === defaultTile) {
             defaultIndices.push(i);
         }
@@ -145,11 +145,9 @@ function setRandomDefaultCenterTile() {
         return;
     }
 
-    // Einen zufälligen Index auswählen
     const randomIndex = defaultIndices[Math.floor(Math.random() * defaultIndices.length)];
-    const binaryRepresentation = randomIndex.toString(2).padStart(8, '0');
+    const binaryRepresentation = randomIndex.toString(2).padStart(4, '0');  // Das Padding ändert sich auf 4
 
-    // Das Grid entsprechend dem binären Wert aktualisieren
     const cells = document.querySelectorAll('#tileGrid td:not(#centerTile)');
     cells.forEach((cell, index) => {
         cell.textContent = binaryRepresentation[index];
@@ -162,6 +160,5 @@ function setRandomDefaultCenterTile() {
         }
     });
 
-    // Das centerTile aktualisieren
     updateCenterTile();
 }
