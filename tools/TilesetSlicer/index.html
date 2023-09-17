@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tileset Splitter</title>
+</head>
+<body>
+    <input type="file" id="tilesetImage">
+    <input type="text" id="suffix" placeholder="Suffix eingeben">
+    <button onclick="splitTiles()">Tiles speichern</button>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script>
+        function splitTiles() {
+            const fileInput = document.getElementById('tilesetImage');
+            const suffix = document.getElementById('suffix').value || 'tile';
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const image = new Image();
+            image.onload = function() {
+                const rows = Math.floor(image.height / 16);
+                const cols = Math.floor(image.width / 16);
+
+                if (rows * 16 !== image.height || cols * 16 !== image.width) {
+                    alert('Die Größe des Bildes sollte ein Vielfaches von 16x16px sein.');
+                    return;
+                }
+
+                canvas.width = 16;
+                canvas.height = 16;
+
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        ctx.clearRect(0, 0, 16, 16);
+                        ctx.drawImage(image, x * 16, y * 16, 16, 16, 0, 0, 16, 16);
+                        const tileDataURL = canvas.toDataURL('image/png');
+                        downloadDataUrl(tileDataURL, `${suffix}_${y}_${x}.png`);
+                    }
+                }
+            }
+
+            image.src = URL.createObjectURL(fileInput.files[0]);
+        }
+
+        function downloadDataUrl(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
