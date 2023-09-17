@@ -35,9 +35,9 @@
 }
 
 .grass {
-    background-color: green;
+    background-color: rgb(22, 22, 22);
 }
 
 .dirt {
-    background-color: #A67B5B;
+    background-color: rgb(59, 59, 150);
 }
