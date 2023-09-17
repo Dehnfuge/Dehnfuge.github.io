@@ -1,4 +1,5 @@
-const tileMapping = Array(256).fill('grasserde_0_7.png');
+const suffix = "höhle"
+const tileMapping = Array(256).fill(suffix+'_0_7.png');
 let currentCenterTileIndex = 0;
 
 function toggleTile(td) {
@@ -39,13 +40,13 @@ for (let y = 0; y < 10; y++) {
         const cell = row.insertCell(x);
         const img = document.createElement('img');
         
-        img.src = `./grasserde_${y}_${x}.png`;
-        img.alt = `Grasserde Tile (${y}, ${x})`;
+        img.src = `./${suffix}_${y}_${x}.png`;
+        img.alt = `${suffix} Tile (${y}, ${x})`;
         img.width = 50;  
         img.height = 50; 
         
         img.addEventListener('click', () => {
-            tileMapping[currentCenterTileIndex] = `grasserde_${y}_${x}.png`;
+            tileMapping[currentCenterTileIndex] = `${suffix}_${y}_${x}.png`;
             updateCenterTile();
         });
 
@@ -102,7 +103,7 @@ function loadTileMapping() {
 }
 
 function listDefaultCombinations() {
-    const defaultTile = 'grasserde_0_7.png';
+    const defaultTile = suffix+'_0_7.png';
     const defaultCombinations = [];
 
     for (let i = 0; i < tileMapping.length; i++) {
@@ -129,7 +130,7 @@ function listDefaultCombinations() {
 }
 
 function setRandomDefaultCenterTile() {
-    const defaultTile = 'grasserde_0_7.png';
+    const defaultTile = suffix+'_0_7.png';
     const defaultIndices = [];
 
     for (let i = 0; i < tileMapping.length; i++) {
