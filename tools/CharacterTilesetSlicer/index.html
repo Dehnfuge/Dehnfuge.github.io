@@ -44,7 +44,7 @@
                             canvas.height = tileSize;
                             ctx.drawImage(img, x * tileSize, y * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
 
-                            const filename = `${suffixes[setCounter] || setCounter}_${columnCounter}_${y}.png`;
+                            const filename = `${suffixes[setCounter] || setCounter}_${y}_${columnCounter}.png`;
                             const imgDataUrl = canvas.toDataURL("image/png");
                             downloadImage(imgDataUrl, filename);
 
