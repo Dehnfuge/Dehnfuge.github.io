@@ -1,22 +1,22 @@
-target = `rgb(30, 30, 30) - Charcoal Gray
+target = `    rgb(30, 30, 30) - Charcoal Gray
 rgb(150, 75, 30) - Rust Red
-rgb(255, 140, 70) - Caramel Brown
+rgb(255, 140, 70) - Peachy Pink
 rgb(200, 100, 40) - Burnt Sienna
-rgb(255, 165, 110) - Salmon
-rgb(255, 120, 50) - Tangerine
-rgb(255, 140, 75) - Apricot
+rgb(255, 165, 110) - Salmon Pink
+rgb(255, 120, 50) - Sunflower Yellow
+rgb(255, 140, 75) - Terracotta Red
 rgb(40, 40, 40) - Dark Slate
 rgb(0, 80, 160) - Deep Blue
 rgb(220, 150, 150) - Dusty Rose
-rgb(150, 60, 180) - Mauve
+rgb(120, 70, 50) - Brown
 rgb(90, 45, 40) - Mahogany
 rgb(0, 120, 210) - Sapphire Blue
-rgb(170, 200, 100) - Olive Green
+rgb(150, 170, 70) - Chartreuse
 rgb(20, 70, 130) - Midnight Blue
 rgb(60, 30, 25) - Espresso
 rgb(220, 170, 160) - Antique Rose
 rgb(20, 60, 110) - Deep Navy
-rgb(10, 50, 90) - Navy
+rgb(70, 70, 100) - Indigo
 rgb(0, 130, 255) - Electric Blue
 rgb(50, 50, 50) - Onyx
 rgb(60, 40, 60) - Plum
