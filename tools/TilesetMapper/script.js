@@ -1,4 +1,4 @@
-const suffix = "höhle"
+const suffix = "frozentiles"
 const defaultPrefix = "_2_1"
 const tileMapping = Array(256).fill(suffix+defaultPrefix+'.png');
 let currentCenterTileIndex = 0;
