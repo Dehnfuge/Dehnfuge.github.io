@@ -1,3 +1,5 @@
+import image, change color
+
 ```js
 origin = `rgb(0, 0, 0)
 rgb(107, 53, 18)

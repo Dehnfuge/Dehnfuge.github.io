@@ -1,0 +1,1 @@
+take bits of a tileset and paste it to new places
