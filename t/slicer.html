@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas Image Upload and Download</title>
+</head>
+<body>
+  <input type="file" id="upload" accept="image/*">
+  <br>
+  <textarea id="prefixes" style="width: 945px; height: 152px;">
+[
+    {"prefix": "bob_bow_idle", "startX": 0, "startY": 0, "stepsX": 4, "stepsY": 8, "size": 44},
+    {"prefix": "bob_bow_run", "startX": 220, "startY": 0, "stepsX": 4, "stepsY": 8, "size": 44},
+    {"prefix": "bob_bow_act", "startX": 440, "startY": 0, "stepsX": 8, "stepsY": 8, "size": 44}
+]
+  </textarea>
+  <br>
+  <button id="downloadBtn">Download Sections</button>
+  <br>
+  <canvas id="previewCanvas" style="border:1px solid #000000;"></canvas>
+
+  <script>
+
+/*
+[
+  {"prefix": "amogus_axt", "startX": 0, "startY": 0, "stepX": 64, "stepY": 64, "stepsX": 4, "stepsY": 8, "size": 64}
+]
+  */
+
+    class ImageHandler {
+      constructor(canvasId, fileInputId, prefixesInputId, downloadBtnId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.fileInput = document.getElementById(fileInputId);
+        this.prefixesInput = document.getElementById(prefixesInputId);
+        this.downloadBtn = document.getElementById(downloadBtnId);
+        this.image = new Image();
+
+        this.addEventListeners();
+      }
+
+      addEventListeners() {
+        this.fileInput.addEventListener('change', (e) => this.loadImage(e));
+        this.downloadBtn.addEventListener('click', () => this.handleDownload());
+      }
+
+      loadImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          this.image.onload = () => {
+            this.drawCanvas();
+          };
+          this.image.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+      }
+
+      drawCanvas() {
+        this.canvas.width = this.image.width;
+        this.canvas.height = this.image.height;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height);
+      }
+
+      handleDownload() {
+        const input = this.prefixesInput.value;
+        let configurations;
+
+        try {
+          configurations = JSON.parse(input);
+        } catch (e) {
+          alert('Invalid JSON format');
+          return;
+        }
+
+        configurations.forEach(config => {
+          const { prefix, startX, startY, stepX, stepY, stepsX, stepsY, size, sizeX, sizeY } = config;
+          this.downloadSections(prefix, startX || 0, startY || 0, stepX || sizeX || size, stepY || sizeY || size, stepsX || 1, stepsY || 1, sizeX || size, sizeY || size || 16);
+        });
+      }
+
+      downloadSections(prefix, startX, startY, stepX, stepY, stepsX, stepsY, sizeX, sizeY) {
+        for (let i = 0; i < stepsX; i++) {
+          for (let j = 0; j < stepsY; j++) {
+            const x = startX + i * stepX;
+            const y = startY + j * stepY;
+            const filename = `${prefix}_${i}_${j}.png`;
+            this.downloadSection(x, y, sizeX, sizeY, filename);
+          }
+        }
+      }
+
+      downloadSection(x, y, sizeX, sizeY, filename) {
+        const sectionCanvas = document.createElement('canvas');
+        sectionCanvas.width = sizeX;
+        sectionCanvas.height = sizeY;
+        const sectionCtx = sectionCanvas.getContext('2d');
+
+        sectionCtx.drawImage(this.canvas, x, y, sizeX, sizeY, 0, 0, sizeX, sizeY);
+
+        const dataURL = sectionCanvas.toDataURL('image/png');
+
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    new ImageHandler('previewCanvas', 'upload', 'prefixes', 'downloadBtn');
+  </script>
+</body>
+</html>
