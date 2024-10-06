@@ -16,11 +16,7 @@
 <body>
     <input type="file" id="fileInput" accept="image/*">
     <br>
-    <label for="startFrame">Start Frame:</label>
-    <input type="number" id="startFrame" min="0" value="0">
-    <label for="endFrame">End Frame:</label>
-    <input type="number" id="endFrame" min="0" value="0">
-    <br>
+    
     <label for="filePrefix">Dateipräfix:</label>
     <input type="text" id="filePrefix" value="sprite">
     <br>
@@ -33,10 +29,9 @@
 
     <script>
         const fileInput = document.getElementById('fileInput');
-        const startFrameInput = document.getElementById('startFrame');
-        const endFrameInput = document.getElementById('endFrame');
         const filePrefixInput = document.getElementById('filePrefix');
         const mergeRowsInput = document.getElementById('mergeRows');
+        mergeRowsInput.value = '0,1,4,6,9';
         const exportFramesButton = document.getElementById('exportFramesButton');
         const canvas = document.getElementById('spriteCanvas');
         const ctx = canvas.getContext('2d');
@@ -54,7 +49,9 @@
                 spriteSheet = new Image();
                 spriteSheet.src = imageUrl;
                 spriteSheet.onload = () => {
-                    if (animationInterval) { clearInterval(animationInterval); }
+                    if (animationInterval) {
+                        clearInterval(animationInterval);
+                    }
                     animationSpeed = 100; // Reset to default speed when a new image is loaded
                     startAnimation();
                 };
@@ -66,20 +63,13 @@
             animationInterval = setInterval(() => {
                 if (spriteSheet) {
                     drawFrame();
-                    currentFrame = currentFrame + 1 > endFrame ? startFrame : (currentFrame + 1) % getNumberOfFrames();
+                    currentFrame = (currentFrame + 1) % getNumberOfFrames();
                 }
             }, animationSpeed);
         }
 
         function drawFrame() {
-            const startFrame = parseInt(startFrameInput.value, 10);
-            const endFrame = parseInt(endFrameInput.value, 10) || getNumberOfFrames() - 1;
             const mergeRows = mergeRowsInput.value.split(',').map(val => parseInt(val.trim(), 10)).filter(val => !isNaN(val));
-
-            if (currentFrame < startFrame || currentFrame > endFrame) {
-                currentFrame = (currentFrame + 1) % getNumberOfFrames();
-                return;
-            }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -114,15 +104,9 @@
 
             const prefix = filePrefixInput.value;
             const numberOfFrames = getNumberOfFrames();
-            const startFrame = parseInt(startFrameInput.value, 10);
-            const endFrame = parseInt(endFrameInput.value, 10) || numberOfFrames - 1;
             const mergeRows = mergeRowsInput.value.split(',').map(val => parseInt(val.trim(), 10)).filter(val => !isNaN(val));
 
             for (let frame = 0; frame < numberOfFrames; frame++) {
-                if (frame < startFrame || frame > endFrame) {
-                    continue;
-                }
-
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 // Draw all merged rows into the same frame
