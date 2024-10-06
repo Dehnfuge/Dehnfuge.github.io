@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spritesheet-Animator</title>
+    <style>
+        #fileInput {
+            margin-bottom: 10px;
+        }
+        #directionSlider {
+            margin: 10px 0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="fileInput" accept="image/*">
+    <br>
+    <input type="range" id="directionSlider" min="0" max="7" value="0">
+    <br>
+    <label for="excludeFrames">Zu exkludierende Spalten (Index, durch Kommas getrennt):</label>
+    <input type="text" id="excludeFrames" value="4,9,18,23,28">
+    <br>
+    <label for="startFrame">Start Frame:</label>
+    <input type="number" id="startFrame" min="0" value="0">
+    <label for="endFrame">End Frame:</label>
+    <input type="number" id="endFrame" min="0" value="0">
+    <br>
+    <canvas id="spriteCanvas" width="44" height="44"></canvas>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const directionSlider = document.getElementById('directionSlider');
+        const excludeFramesInput = document.getElementById('excludeFrames');
+        const startFrameInput = document.getElementById('startFrame');
+        const endFrameInput = document.getElementById('endFrame');
+        const canvas = document.getElementById('spriteCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let spriteSheet = null;
+        let currentFrame = 0;
+        let currentDirection = 0;
+        const frameWidth = 44;
+        const frameHeight = 44;
+        const directions = 8;
+        let animationSpeed = 100; // Milliseconds per frame
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const imageUrl = URL.createObjectURL(file);
+                spriteSheet = new Image();
+                spriteSheet.src = imageUrl;
+                spriteSheet.onload = () => {
+                if (animationInterval) { clearInterval(animationInterval); }
+                animationSpeed = 100; // Reset to default speed when a new image is loaded // Increase speed with new image, minimum speed is 50ms
+                startAnimation();
+            };
+            }
+        });
+
+        directionSlider.addEventListener('input', (event) => {
+            currentDirection = parseInt(event.target.value, 10);
+        });
+
+        var animationInterval;
+        function startAnimation() {
+            animationInterval = setInterval(() => {
+                if (spriteSheet) {
+                    drawFrame();
+                    currentFrame = currentFrame + 1 > endFrame ? startFrame : currentFrame + 1;
+                }
+            }, animationSpeed);
+        }
+
+        function drawFrame() {
+            const excludeFrames = excludeFramesInput.value.split(',').map(val => parseInt(val.trim(), 10)).filter(val => !isNaN(val));
+            const startFrame = parseInt(startFrameInput.value, 10);
+            const endFrame = parseInt(endFrameInput.value, 10) || getNumberOfFrames() - 1;
+
+            if (currentFrame < startFrame || currentFrame > endFrame || excludeFrames.includes(currentFrame)) {
+                currentFrame = (currentFrame + 1) % getNumberOfFrames();
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(
+                spriteSheet,
+                currentFrame * frameWidth,
+                currentDirection * frameHeight,
+                frameWidth,
+                frameHeight,
+                0,
+                0,
+                frameWidth,
+                frameHeight
+            );
+        }
+
+        function getNumberOfFrames() {
+            if (spriteSheet) {
+                return Math.floor(spriteSheet.width / frameWidth);
+            }
+            return 1;
+        }
+    </script>
+</body>
+</html>
