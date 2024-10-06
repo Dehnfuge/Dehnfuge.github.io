@@ -24,6 +24,9 @@
     <input type="text" id="mergeRows" value="">
     <br>
     <button id="exportFramesButton">Exportiere Frames</button>
+<br>
+<label for="frameIncrementInput">Inkrement Wert:</label>
+<input type="number" id="frameIncrementInput" min="1" max="100" value="1">
     <br>
     <canvas id="spriteCanvas" width="44" height="44"></canvas>
 
@@ -34,6 +37,7 @@
         mergeRowsInput.value = '0,1,4,6,9';
         const exportFramesButton = document.getElementById('exportFramesButton');
         const canvas = document.getElementById('spriteCanvas');
+        const frameIncrementInput = document.getElementById('frameIncrementInput');
         const ctx = canvas.getContext('2d');
 
         let spriteSheet = null;
@@ -97,6 +101,7 @@
         }
 
         exportFramesButton.addEventListener('click', () => {
+            const frameIncrement = parseInt(frameIncrementInput)
             if (!spriteSheet) {
                 alert('Bitte laden Sie zuerst ein Spritesheet hoch.');
                 return;
@@ -125,7 +130,9 @@
                 });
 
                 const link = document.createElement('a');
-                link.download = `${prefix}_merged_${frame}.png`;
+                const direction = Math.floor(frame / 4);
+                const animationIndex = frame % 4;
+                link.download = `${prefix}_${animationIndex}_${direction}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
             }
