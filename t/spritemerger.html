@@ -131,8 +131,8 @@
                 });
 
                 const link = document.createElement('a');
-                const direction = Math.floor(frame / 4);
-                const animationIndex = frame % 4;
+                const direction = Math.floor(frame / frameIncrement);
+                const animationIndex = frame % frameIncrement;
                 link.download = `${prefix}_${animationIndex}_${direction}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
