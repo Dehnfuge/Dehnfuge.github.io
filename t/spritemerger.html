@@ -16,15 +16,15 @@
 <body style="background-color: #2e2e2e;">
     <input type="file" id="fileInput" accept="image/*">
     <br>
-    
     <label for="filePrefix">Dateipräfix:</label>
     <input type="text" id="filePrefix" value="sprite">
     <br>
     <label for="mergeRows">Zu mergenede Reihen (Index, durch Kommas getrennt):</label>
-    <input type="text" id="mergeRows" value="">
+    <input type="text" id="mergeRows" value="0,1,4,6,9">
     <br>
     <button id="exportFramesButton">Exportiere Frames</button>
-<button id="exportSeparateFramesButton">Exportiere Einzelbilder</button>
+    <button id="exportSeparateFramesButton">Exportiere Einzelbilder</button>
+    <button id="toggleBackgroundButton">Wechsle Hintergrundfarbe</button>
     <br>
     <label for="frameIncrementInput">Inkrement Wert:</label>
     <input type="number" id="frameIncrementInput" min="1" max="100" value="4">
@@ -35,11 +35,11 @@
         const fileInput = document.getElementById('fileInput');
         const filePrefixInput = document.getElementById('filePrefix');
         const mergeRowsInput = document.getElementById('mergeRows');
-        mergeRowsInput.value = '0,1,4,6,9';
         const exportFramesButton = document.getElementById('exportFramesButton');
-        const canvas = document.getElementById('spriteCanvas');
-const exportSeparateFramesButton = document.getElementById('exportSeparateFramesButton');
+        const exportSeparateFramesButton = document.getElementById('exportSeparateFramesButton');
+        const toggleBackgroundButton = document.getElementById('toggleBackgroundButton');
         const frameIncrementInput = document.getElementById('frameIncrementInput');
+        const canvas = document.getElementById('spriteCanvas');
         const ctx = canvas.getContext('2d');
 
         let spriteSheet = null;
@@ -47,6 +47,7 @@ const exportSeparateFramesButton = document.getElementById('exportSeparateFrames
         const frameWidth = 44;
         const frameHeight = 44;
         let animationSpeed = 100; // Milliseconds per frame
+        let animationInterval;
 
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -64,7 +65,6 @@ const exportSeparateFramesButton = document.getElementById('exportSeparateFrames
             }
         });
 
-        var animationInterval;
         function startAnimation() {
             animationInterval = setInterval(() => {
                 if (spriteSheet) {
@@ -76,7 +76,6 @@ const exportSeparateFramesButton = document.getElementById('exportSeparateFrames
 
         function drawFrame() {
             const mergeRows = mergeRowsInput.value.split(',').map(val => parseInt(val.trim(), 10)).filter(val => !isNaN(val));
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw all merged rows into the same frame
@@ -139,7 +138,8 @@ const exportSeparateFramesButton = document.getElementById('exportSeparateFrames
                 link.click();
             }
         });
-    exportSeparateFramesButton.addEventListener('click', () => {
+
+        exportSeparateFramesButton.addEventListener('click', () => {
             if (!spriteSheet) {
                 alert('Bitte laden Sie zuerst ein Spritesheet hoch.');
                 return;
@@ -170,6 +170,10 @@ const exportSeparateFramesButton = document.getElementById('exportSeparateFrames
                     link.click();
                 });
             }
+        });
+
+        toggleBackgroundButton.addEventListener('click', () => {
+            document.body.style.backgroundColor = document.body.style.backgroundColor === 'cyan' ? '#2e2e2e' : 'cyan';
         });
     </script>
 </body>
