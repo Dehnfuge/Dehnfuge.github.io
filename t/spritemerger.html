@@ -24,6 +24,7 @@
     <input type="text" id="mergeRows" value="">
     <br>
     <button id="exportFramesButton">Exportiere Frames</button>
+<button id="exportSeparateFramesButton">Exportiere Einzelbilder</button>
     <br>
     <label for="frameIncrementInput">Inkrement Wert:</label>
     <input type="number" id="frameIncrementInput" min="1" max="100" value="4">
@@ -37,6 +38,7 @@
         mergeRowsInput.value = '0,1,4,6,9';
         const exportFramesButton = document.getElementById('exportFramesButton');
         const canvas = document.getElementById('spriteCanvas');
+const exportSeparateFramesButton = document.getElementById('exportSeparateFramesButton');
         const frameIncrementInput = document.getElementById('frameIncrementInput');
         const ctx = canvas.getContext('2d');
 
@@ -135,6 +137,38 @@
                 link.download = `${prefix}_${animationIndex}_${direction}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
+            }
+        });
+    exportSeparateFramesButton.addEventListener('click', () => {
+            if (!spriteSheet) {
+                alert('Bitte laden Sie zuerst ein Spritesheet hoch.');
+                return;
+            }
+
+            const prefix = filePrefixInput.value;
+            const numberOfFrames = getNumberOfFrames();
+            const mergeRows = mergeRowsInput.value.split(',').map(val => parseInt(val.trim(), 10)).filter(val => !isNaN(val));
+
+            for (let frame = 0; frame < numberOfFrames; frame++) {
+                mergeRows.forEach(direction => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(
+                        spriteSheet,
+                        frame * frameWidth,
+                        direction * frameHeight,
+                        frameWidth,
+                        frameHeight,
+                        0,
+                        0,
+                        frameWidth,
+                        frameHeight
+                    );
+
+                    const link = document.createElement('a');
+                    link.download = `${prefix}_${frame}_suffix_${direction}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                });
             }
         });
     </script>
