@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braille Toggler</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+        }
+        .black {
+            background-color: black;
+        }
+        .white {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <table id="brailleTable">
+        <tr>
+            <td data-pos="1" class="white"></td>
+            <td data-pos="4" class="white"></td>
+        </tr>
+        <tr>
+            <td data-pos="2" class="white"></td>
+            <td data-pos="5" class="white"></td>
+        </tr>
+        <tr>
+            <td data-pos="3" class="white"></td>
+            <td data-pos="6" class="white"></td>
+        </tr>
+        <tr>
+            <td data-pos="7" class="white"></td>
+            <td data-pos="8" class="white"></td>
+        </tr>
+    </table>
+    <br>
+    <div>
+        Corresponding Braille Character: <span id="brailleCharacter">⠁</span>
+    </div>
+
+    <script>
+        const brailleTable = document.getElementById("brailleTable");
+        const brailleCharacterDisplay = document.getElementById("brailleCharacter");
+
+        brailleTable.addEventListener("click", (e) => {
+            if (e.target.tagName === "TD") {
+                // Toggle color of the cell
+                e.target.classList.toggle("black");
+                e.target.classList.toggle("white");
+                
+                // Update Braille character
+                updateBrailleCharacter();
+            }
+        });
+
+        function updateBrailleCharacter() {
+            let brailleValue = 0;
+            // Loop through each cell to determine its state
+            const cells = brailleTable.getElementsByTagName("td");
+            for (let cell of cells) {
+                if (cell.classList.contains("black")) {
+                    brailleValue += Math.pow(2, parseInt(cell.dataset.pos) - 1);
+                }
+            }
+            // Convert the brailleValue to the corresponding Unicode Braille character
+            const brailleChar = String.fromCharCode(0x2800 + brailleValue);
+            brailleCharacterDisplay.textContent = brailleChar;
+        }
+    </script>
+</body>
+</html>
